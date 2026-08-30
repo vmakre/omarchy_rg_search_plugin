@@ -11,13 +11,19 @@ Requires `ag` (package `the_silver_searcher`) and `omarchy-launch-editor`
 (ships with Omarchy).
 
 ```sh
-omarchy plugin add <this-repo-url> --enable
+omarchy plugin add https://github.com/vmakre/omarchy_ag_search_plugin --enable
 ```
 
 Place it in a bar section if needed:
 
 ```sh
 omarchy bar move ag_search --section right
+```
+
+Remove plugin
+
+```sh
+omarchy plugin remove  ag_search.plugin
 ```
 
 ## Usage
@@ -50,6 +56,7 @@ Example entry:
   `file:line` syntax for nvim/vim, helix, nano, micro, and VS Code.
 - Saving files under `~/.config/omarchy/plugins/ag_search/` hot-reloads the
   plugin in the running shell — no restart needed.
+
 
 ## License
 

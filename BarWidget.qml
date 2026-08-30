@@ -94,8 +94,8 @@ Panel {
       if (bare) {
         // Single-file search root: ag omits the path and prints bare
         // "line:text". The file is the search root itself.
-        file = searchRoot
         line = bare[1]
+        file = searchRoot
       } else {
         // Folder search: ag prints "path:line:text"; anchor on the numeric
         // line number so colons in a path can't shift the fields.
