@@ -17,7 +17,13 @@ omarchy plugin add https://github.com/vmakre/omarchy_ag_search_plugin --enable
 Place it in a bar section if needed:
 
 ```sh
-omarchy bar move ag_search --section right
+omarchy bar move ag_search.plugin --section right
+```
+
+Remove plugin
+
+```sh
+omarchy plugin remove  ag_search.plugin
 ```
 
 Remove plugin
