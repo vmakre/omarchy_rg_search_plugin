@@ -1,0 +1,38 @@
+#!/bin/bash
+# Open a file at a line in the user's default editor.
+# Helper for the ag_search bar widget; the editor's line argument syntax
+# varies, so this resolves the default and passes the right form through
+# omarchy-launch-editor (which handles GUI vs TUI launching itself).
+
+file="${1:?usage: ag-open <file> <line>}"
+line="${2:-1}"
+
+# Only a plain positive integer is a usable line number; anything else
+# (garbled parse output, colons from a path) would corrupt the editor's
+# file:line syntax, so fall back to opening the file alone.
+if [[ ! $line =~ ^[0-9]+$ ]]; then
+  omarchy-launch-editor "$file"
+  exit 0
+fi
+
+editor="$(cat "$HOME/.local/state/omarchy/defaults/editor" 2>/dev/null || echo nvim)"
+case "${editor##*/}" in
+  nvim | vim)
+    omarchy-launch-editor "$file" "+$line"
+    ;;
+  hx | helix)
+    omarchy-launch-editor "$file:$line"
+    ;;
+  nano)
+    omarchy-launch-editor "+$line" "$file"
+    ;;
+  micro)
+    omarchy-launch-editor "$file:+$line"
+    ;;
+  code | codium | code-oss | code-insiders)
+    omarchy-launch-editor --goto "$file:$line"
+    ;;
+  *)
+    omarchy-launch-editor "$file"
+    ;;
+esac

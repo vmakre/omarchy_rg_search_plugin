@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "ag_search",
+  "name": "ag Search",
+  "version": "1.0.0",
+  "author": "vmakre",
+  "license": "MIT",
+  "description": "Search your files with ag (The Silver Searcher) from the bar.",
+  "kinds": ["bar-widget"],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "ag Search",
+    "description": "Type a query and search with ag. Enter runs the search, Up/Down move through results, Enter opens the selected match in your editor.",
+    "category": "Utilities",
+    "allowMultiple": false,
+    "defaultSection": "right",
+    "defaults": {
+      "folder": "~",
+      "prompt": "🔍 "
+    },
+    "schema": [
+      {
+        "key": "folder",
+        "type": "string",
+        "label": "Search root",
+        "defaultValue": "~"
+      },
+      {
+        "key": "prompt",
+        "type": "string",
+        "label": "Prompt",
+        "defaultValue": "🔍 "
+      }
+    ]
+  }
+}
