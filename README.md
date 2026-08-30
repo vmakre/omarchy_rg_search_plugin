@@ -26,12 +26,6 @@ Remove plugin
 omarchy plugin remove  ag_search.plugin
 ```
 
-Remove plugin
-
-```sh
-omarchy plugin remove  ag_search.plugin
-```
-
 ## Usage
 
 - Type a query and press **Enter** to search.
