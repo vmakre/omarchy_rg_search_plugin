@@ -1,10 +1,10 @@
 #!/bin/bash
 # Open a file at a line in the user's default editor.
-# Helper for the ag_search bar widget; the editor's line argument syntax
+# Helper for the rg_search bar widget; the editor's line argument syntax
 # varies, so this resolves the default and passes the right form through
 # omarchy-launch-editor (which handles GUI vs TUI launching itself).
 
-file="${1:?usage: ag-open <file> <line>}"
+file="${1:?usage: rg-open <file> <line>}"
 line="${2:-1}"
 
 # Only a plain positive integer is a usable line number; anything else

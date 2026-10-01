@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
-  "id": "ag_search.plugin",
-  "name": "ag Search",
-  "version": "1.0.0",
+  "id": "rg_search.plugin",
+  "name": "rg Search",
+  "version": "1.1.0",
   "author": "vmakre",
   "license": "MIT",
-  "description": "Search your files with ag (The Silver Searcher) from the bar.",
+  "description": "Search your files with ripgrep (rg) from the bar.",
   "kinds": ["bar-widget"],
   "entryPoints": {
     "barWidget": "BarWidget.qml"
   },
   "barWidget": {
-    "displayName": "ag Search",
-    "description": "Type a query and search with ag. Enter runs the search, Up/Down move through results, Enter opens the selected match in your editor.",
+    "displayName": "rg Search",
+    "description": "Type a query and search with ripgrep. Enter runs the search, Up/Down move through results, Enter opens the selected match in your editor.",
     "category": "Utilities",
     "allowMultiple": false,
     "defaultSection": "right",

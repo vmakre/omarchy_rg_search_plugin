@@ -4,15 +4,15 @@ import Quickshell.Io
 import qs.Commons
 import qs.Ui
 
-// ag search — a bar button that opens a popup search field. Type a query and
-// press Enter to search the tree with ag; Up/Down step through the matches
-// and Enter opens the selected one in the default editor. Esc clears the
-// query, Esc again closes the popup.
+// ripgrep search — a bar button that opens a popup search field. Type a query
+// and press Enter to search the tree with ripgrep; Up/Down step through the
+// matches and Enter opens the selected one in the default editor. Esc clears
+// the query, Esc again closes the popup.
 
 Panel {
   id: root
-  moduleName: "ag_search"
-  ipcTarget: "ag_search"
+  moduleName: "rg_search"
+  ipcTarget: "rg_search"
   manageIpc: false
 
   // --- settings (inline on the shell.json layout entry) ---
@@ -28,7 +28,7 @@ Panel {
 
   // Resolved from this file's own directory so the plugin can live anywhere.
   readonly property string openHelper:
-    String(Qt.resolvedUrl("bin/ag-open")).replace(/^file:\/\//, "")
+    String(Qt.resolvedUrl("bin/rg-open")).replace(/^file:\/\//, "")
 
   // --- search root ---
   readonly property string searchRoot: {
@@ -64,17 +64,15 @@ Panel {
     status = ""
     results = []
     cursor = 0
-    // Quickshell gives every Process a pipe on stdin, and ag treats a pipe
-    // (or regular file) on stdin as stream mode ("tail -f | ag"): even with
-    // a search path it then drops the filename from every result line, so
-    // we would only ever see bare "line:text" and could not tell which file
-    // a match came from. Redirecting stdin from /dev/null keeps ag in normal
-    // path-searching mode, restoring "path:line:text" output. The query and
-    // root travel as positional args, so no shell quoting can corrupt them.
+    // ripgrep searches the given path even when its stdin is a pipe, so the
+    // /dev/null redirect below is not strictly required; we keep it so stdin
+    // is never mistaken for input and the search target stays unambiguous.
+    // The query and root travel as positional args (pattern via -e), so no
+    // shell quoting can corrupt them.
     searchProc.command = [
       "bash", "-c",
-      "exec ag --nogroup --nocolor --numbers -- \"$1\" \"$2\" < /dev/null",
-      "ag-search", q, searchRoot
+      "exec rg --no-heading --color=never --line-number --smart-case -e \"$1\" \"$2\" < /dev/null",
+      "rg-search", q, searchRoot
     ]
     timeoutTimer.restart()
     searchProc.running = true
@@ -92,12 +90,12 @@ Panel {
       var line
       var bare = /^(\d+):(.*)$/.exec(s)
       if (bare) {
-        // Single-file search root: ag omits the path and prints bare
+        // Single-file search root: ripgrep omits the path and prints bare
         // "line:text". The file is the search root itself.
         line = bare[1]
         file = searchRoot
       } else {
-        // Folder search: ag prints "path:line:text"; anchor on the numeric
+        // Folder search: ripgrep prints "path:line:text"; anchor on the numeric
         // line number so colons in a path can't shift the fields.
         var m = /^(.*?):(\d+):(.*)$/.exec(s)
         if (!m) continue
@@ -143,7 +141,7 @@ Panel {
     : status === "empty" ? "Type a query and press Enter"
     : status === "none" ? "No matches"
     : status === "timeout" ? "Search timed out"
-    : status === "error" ? "ag failed — check the search root and that ag is installed"
+    : status === "error" ? "rg failed — check the search root and that ripgrep is installed"
     : results.length > 0 ? results.length + (results.length === 1 ? " match" : " matches")
     : ""
 
@@ -199,7 +197,7 @@ Panel {
     bar: root.bar
     text: "" // nf-fa-search
     active: root.opened || root.results.length > 0
-    tooltipText: "ag search"
+    tooltipText: "rg search"
     onPressed: function (buttonCode) {
       if (buttonCode === Qt.LeftButton) root.toggle()
     }
@@ -245,7 +243,7 @@ Panel {
           TextField {
             id: searchField
             width: parent.width - promptText.width - Style.space(6)
-            placeholderText: "search with ag…"
+            placeholderText: "search with rg…"
             foreground: root.foreground
             font.family: root.fontFamily
             onTextChanged: root.query = text
